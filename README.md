@@ -3,8 +3,8 @@
 This is a command line tool that helps to convert simple text file or multiple files to HTML file's.
 
   1. To clone the repository in your local machine.
-     git clone https://github.com/Jilesh980/till-tool.git
-     cd till-tool
+     1.1git clone https://github.com/Jilesh980/till-tool.git
+     1.2cd till-tool
   2. Install the require dependencies for the project
      npm install
   3. convert the text file to HTML file
