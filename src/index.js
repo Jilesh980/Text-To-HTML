@@ -60,5 +60,8 @@ yargs
     }
   })
   .demandCommand(1, 'You need to specify a command.')
-  .help()
+  .version('v', 'Show the tool\'s name and version', `til v${packageJson.version}`)
+  .alias('v', 'version')
+  .help('h', 'Show a useful help message')
+  .alias('h', 'help')
   .argv;
