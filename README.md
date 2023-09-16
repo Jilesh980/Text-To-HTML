@@ -21,7 +21,7 @@ Install the required dependencies for the project:
 
 
 Run the code in the terminal to generate the desired output:
-> npm run start
+> node src/index.js process ./file-name.txt 
 
 ##Features
 1. Converts one or multiple text files to HTML files.
