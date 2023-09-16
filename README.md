@@ -6,13 +6,26 @@ This is a command-line tool that helps to convert a simple text file or multiple
 ## Installation
 
 1. To clone the repository to your local machine, run the following command:
+```bash
+git clone https://github.com/Jilesh980/till-tool.git
+cd till-tool
+```
+2. Install the required dependencies for the project:
+```bash
+npm install
+```
+3. Command to display the version of tool
+```bash
+node src/index.js -v
+node src/index.js --version
+```
 
-   ```bash
-   git clone https://github.com/Jilesh980/till-tool.git
-   cd till-tool
+4. The command to display help menu:
 
-Install the required dependencies for the project:
-> npm install
+```bash
+node src/index.js -h
+node src/index.js --help
+```
 
 **USAGE**
 1. converts one or multiple text files to HTML files.
@@ -21,7 +34,9 @@ Install the required dependencies for the project:
 
 
 Run the code in the terminal to generate the desired output:
-> node src/index.js process ./file-name.txt 
+```bash
+node src/index.js process ./file-name.txt 
+```
 
 ##Features
 1. Converts one or multiple text files to HTML files.
