@@ -49,6 +49,8 @@ This is the command if you want to convert `.md` file to `.html` file.
 node src/index.js process ./file-name.md
 ```
 
+If you want to use bold feature of `.md` file than follow this command "** Some Text**"
+
 ##Features
 
 1. Converts one or multiple text files to HTML files.
