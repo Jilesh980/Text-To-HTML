@@ -1,22 +1,26 @@
-// Name: Jilesh Sanjaykumar Patel
-// Student id: 133261206
-
 // src/index.js
-const fs = require('fs');
-const path = require('path');
-const yargs = require('yargs');
+const fs = require("fs");
+const path = require("path");
+const yargs = require("yargs");
 
-// Function to process a single .txt file and generate an HTML file
+// Function to process a single .txt or .md file and generate an HTML file
 function processFile(filePath, outputDir) {
-  const fileName = path.basename(filePath, '.txt');
+  const fileExt = path.extname(filePath);
+  const fileName = path.basename(filePath, fileExt);
   const outputFilePath = path.join(outputDir, `${fileName}.html`);
-  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const fileContent = fs.readFileSync(filePath, "utf8");
 
   // Extract title and content
-  const [title, ...paragraphs] = fileContent.split('\n\n');
-  const titleHtml = title ? `<title>${title}</title><h1>${title}</h1>` : '';
-  const paragraphsHtml = paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('\n');
-  
+  const [title, ...paragraphs] = fileContent.split(/\n{1,}/); // Split by one
+  const titleHtml = title ? `<title>${title}</title><h1>${title}</h1>` : "";
+  const paragraphsHtml = paragraphs
+    .map((paragraph) => {
+      // Support for bold text using double asterisks
+      paragraph = paragraph.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+      return `<p>${paragraph}</p>`;
+    })
+    .join("\n");
+
   const htmlContent = `<!doctype html>
   <html lang="en">
   <head>
@@ -33,50 +37,65 @@ function processFile(filePath, outputDir) {
   console.log(`Generated ${outputFilePath}`);
 }
 
-// Function to process a directory of .txt files
+// Function to process a directory of .txt and .md files
 function processDirectory(dirPath, outputDir) {
   const files = fs.readdirSync(dirPath);
   files.forEach((file) => {
-    if (file.endsWith('.txt')) {
-      processFile(path.join(dirPath, file), outputDir);
+    const filePath = path.join(dirPath, file);
+    if (fs.lstatSync(filePath).isDirectory()) {
+      processDirectory(filePath, outputDir);
+    } else if (file.match(/\.(txt|md)$/)) {
+      // Process only .txt and .md files
+      processFile(filePath, outputDir);
+      console.log(`Converted ${filePath} to HTML.`);
     }
   });
 }
 
 // Main command-line tool logic
 yargs
-  .scriptName('til')
-  .usage('$0 <cmd> [args]')
-  .command('process [input]', 'Process .txt file(s) and generate HTML', (yargs) => {
-    yargs
-      .positional('input', {
-        describe: 'Input .txt file or folder',
-        type: 'string',
-      })
-      .option('output', {
-        alias: 'o',
-        describe: 'Output directory',
-        type: 'string',
-      });
-  }, (argv) => {
-    const inputPath = argv.input;
-    const outputDir = argv.output || 'til'; // Use 'til' if not specified
+  .scriptName("til")
+  .usage("$0 <cmd> [args]")
+  .command(
+    "process [input]",
+    "Process .txt and .md file(s) and generate HTML",
+    (yargs) => {
+      yargs
+        .positional("input", {
+          describe: "Input .txt file or folder",
+          type: "string",
+        })
+        .option("output", {
+          alias: "o",
+          describe: "Output directory",
+          type: "string",
+        });
+    },
+    (argv) => {
+      const inputPath = argv.input;
+      const outputDir = argv.output || "til"; // Use 'til' if not specified
 
-    // Create the output directory if it doesn't exist
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir);
-    }
+      // Create the output directory if it doesn't exist
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+      }
 
-    // If it's a directory, process all .txt files within
-    if (fs.lstatSync(inputPath).isDirectory()) {
-      processDirectory(inputPath, outputDir);
-    } else {
-      processFile(inputPath, outputDir);
+      // If it's a directory, process all .txt and .md files within
+      if (fs.lstatSync(inputPath).isDirectory()) {
+        processDirectory(inputPath, outputDir);
+      } else if (inputPath.match(/\.(txt|md)$/)) {
+        // Process only .txt and .md files
+        processFile(inputPath, outputDir);
+        console.log(`Converted ${inputPath} to HTML.`);
+      } else {
+        console.error(
+          "Invalid input. Please provide a valid .txt or .md file or folder."
+        );
+      }
     }
-  })
-  .demandCommand(1, 'You need to specify a command.')
-  .version('v', 'Show the tool\'s name and version', `til v1.0.0`)
-  .alias('v', 'version')
-  .help('h', 'Show a useful help message')
-  .alias('h', 'help')
-  .argv;
+  )
+  .demandCommand(1, "You need to specify a command.")
+  .version("v", "Show the tool's name and version", `til v1.0.0`)
+  .alias("v", "version")
+  .help("h", "Show a useful help message")
+  .alias("h", "help").argv;
