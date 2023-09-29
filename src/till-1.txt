@@ -2,4 +2,6 @@ Hello everyone,
 
 This is a first paragraph of the site.
 
-Hello my name is jilesh
+Hello my name is Jilesh.
+
+This is second paragraph.

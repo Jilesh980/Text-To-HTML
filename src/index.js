@@ -1,10 +1,11 @@
 // src/index.js
 const fs = require("fs");
 const path = require("path");
+const { argv } = require("process");
 const yargs = require("yargs");
 
 // Function to process a single .txt or .md file and generate an HTML file
-function processFile(filePath, outputDir) {
+function processFile(filePath, outputDir, lang) {
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath, fileExt);
   const outputFilePath = path.join(outputDir, `${fileName}.html`);
@@ -22,7 +23,7 @@ function processFile(filePath, outputDir) {
     .join("\n");
 
   const htmlContent = `<!doctype html>
-  <html lang="en">
+  <html lang="${lang}">
   <head>
     <meta charset="utf-8">
     ${titleHtml}
@@ -38,15 +39,15 @@ function processFile(filePath, outputDir) {
 }
 
 // Function to process a directory of .txt and .md files
-function processDirectory(dirPath, outputDir) {
+function processDirectory(dirPath, outputDir, lang) {
   const files = fs.readdirSync(dirPath);
   files.forEach((file) => {
     const filePath = path.join(dirPath, file);
     if (fs.lstatSync(filePath).isDirectory()) {
-      processDirectory(filePath, outputDir);
+      processDirectory(filePath, outputDir, lang);
     } else if (file.match(/\.(txt|md)$/)) {
       // Process only .txt and .md files
-      processFile(filePath, outputDir);
+      processFile(filePath, outputDir, lang);
       console.log(`Converted ${filePath} to HTML.`);
     }
   });
@@ -69,11 +70,18 @@ yargs
           alias: "o",
           describe: "Output directory",
           type: "string",
+        })
+        .option("lang", {
+          alias: "l",
+          describe: "language for lang attribute on <html> elements",
+          type: "string",
+          default: "en-CA",
         });
     },
     (argv) => {
       const inputPath = argv.input;
       const outputDir = argv.output || "til"; // Use 'til' if not specified
+      const lang = argv.lang;
 
       // Create the output directory if it doesn't exist
       if (!fs.existsSync(outputDir)) {
@@ -82,10 +90,10 @@ yargs
 
       // If it's a directory, process all .txt and .md files within
       if (fs.lstatSync(inputPath).isDirectory()) {
-        processDirectory(inputPath, outputDir);
+        processDirectory(inputPath, outputDir, lang);
       } else if (inputPath.match(/\.(txt|md)$/)) {
         // Process only .txt and .md files
-        processFile(inputPath, outputDir);
+        processFile(inputPath, outputDir, lang);
         console.log(`Converted ${inputPath} to HTML.`);
       } else {
         console.error(
