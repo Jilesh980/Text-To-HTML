@@ -1,17 +1,15 @@
-// src/index.js
 const fs = require("fs");
 const path = require("path");
-const { argv } = require("process");
 const { argv } = require("process");
 const yargs = require("yargs");
 
 // Function to process a single .txt or .md file and generate an HTML file
-function processFile(filePath, outputDir)
- {
-  const fileExt = path.extname(filePath);
-  const fileName = path.basename(filePath, fileExt);
-  const outputFilePath = path.join(outputDir, `${fileName}.html`);
-  const fileContent = fs.readFileSync(filePath, "utf8");
+function processFile(filePath, outputDir, lang) {
+  try {
+    const fileExt = path.extname(filePath);
+    const fileName = path.basename(filePath, fileExt);
+    const outputFilePath = path.join(outputDir, `${fileName}.html`);
+    const fileContent = fs.readFileSync(filePath, "utf8");
 
     // Extract title and content
     const [title, ...paragraphs] = fileContent.split(/\n{1,}/); // Split by one
@@ -40,26 +38,6 @@ function processFile(filePath, outputDir)
     console.log(`Generated ${outputFilePath}`);
   } catch (error) {
     console.error(`Error processing file: ${error.message}`);
-    process.exit(1); // Exit with a non-zero exit code
-  }
-}
-
-// Function to process a directory of .txt and .md files
-function processDirectory(dirPath, outputDir, lang) {
-  try {
-    const files = fs.readdirSync(dirPath);
-    files.forEach((file) => {
-      const filePath = path.join(dirPath, file);
-      if (fs.lstatSync(filePath).isDirectory()) {
-        processDirectory(filePath, outputDir, lang);
-      } else if (file.match(/\.(txt|md)$/)) {
-        // Process only .txt and .md files
-        processFile(filePath, outputDir, lang);
-        console.log(`Converted ${filePath} to HTML.`);
-      }
-    });
-  } catch (error) {
-    console.error(`Error processing directory: ${error.message}`);
     process.exit(1); // Exit with a non-zero exit code
   }
 }
