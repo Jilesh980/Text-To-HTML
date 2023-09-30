@@ -1,4 +1,3 @@
-// src/index.js
 const fs = require("fs");
 const path = require("path");
 const { argv } = require("process");
@@ -39,26 +38,6 @@ function processFile(filePath, outputDir, lang) {
     console.log(`Generated ${outputFilePath}`);
   } catch (error) {
     console.error(`Error processing file: ${error.message}`);
-    process.exit(1); // Exit with a non-zero exit code
-  }
-}
-
-// Function to process a directory of .txt and .md files
-function processDirectory(dirPath, outputDir, lang) {
-  try {
-    const files = fs.readdirSync(dirPath);
-    files.forEach((file) => {
-      const filePath = path.join(dirPath, file);
-      if (fs.lstatSync(filePath).isDirectory()) {
-        processDirectory(filePath, outputDir, lang);
-      } else if (file.match(/\.(txt|md)$/)) {
-        // Process only .txt and .md files
-        processFile(filePath, outputDir, lang);
-        console.log(`Converted ${filePath} to HTML.`);
-      }
-    });
-  } catch (error) {
-    console.error(`Error processing directory: ${error.message}`);
     process.exit(1); // Exit with a non-zero exit code
   }
 }
