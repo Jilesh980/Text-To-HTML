@@ -30,6 +30,11 @@ node src/index.js --version
 node src/index.js -h
 node src/index.js --help
 ```
+5. Command to convert .txt or .md file to HTML file using config -c
+
+```bash
+node src/index.js process ./inputfile.txt -c ./outputfile
+```
 
 **USAGE**
 

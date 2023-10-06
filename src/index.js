@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { argv } = require("process");
 const yargs = require("yargs");
+const toml = require("toml");
 
 // Function to process a single .txt or .md file and generate an HTML file
 function processFile(filePath, outputDir, lang) {
@@ -42,6 +43,16 @@ function processFile(filePath, outputDir, lang) {
   }
 }
 
+function processConfigFile(configPath) {
+  try{
+    const configContent = fs.readFileSync(configPath, "utf-8");
+    return toml.parse(configContent);
+  } catch (error) {
+    console.error(`Error reading/parsing config file: ${error.message}`);
+    process.exit(1);
+  }
+}
+
 // Main command-line tool logic
 yargs
   .scriptName("til")
@@ -65,12 +76,26 @@ yargs
           describe: "language for lang attribute on <html> elements",
           type: "string",
           default: "en-CA",
+        })
+        .option("config", {
+          alias: "c",
+          describe: "Path to TOML configuration file",
+          type: "string",
         });
     },
     (argv) => {
       const inputPath = argv.input;
       const outputDir = argv.output || "til"; // Use 'til' if not specified
       const lang = argv.lang;
+
+      // Check if a config file is provided
+      if (argv.config) {
+        const configData = processConfigFile(argv.config);
+
+        // Override options from config file
+        argv.output = configData.output || argv.output;
+        argv.lang = configData.lang || argv.lang;
+      }
 
       // Create the output directory if it doesn't exist
       if (!fs.existsSync(outputDir)) {
