@@ -4,7 +4,7 @@ const { argv } = require("process");
 const yargs = require("yargs");
 const toml = require("toml");
 
-// Function to process a single .txt or .md file and generate an HTML file
+//  Function to process a single .txt or .md file and generate an HTML file
 function processFile(filePath, outputDir, lang) {
   try {
     const fileExt = path.extname(filePath);
