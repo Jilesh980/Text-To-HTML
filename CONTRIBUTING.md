@@ -34,7 +34,8 @@ Please provide a clear and concise description of your changes in the PR.
 **Reporting Issues**
 If you encounter any issues or have suggestions for improvements, please create an issue on the GitHub repository. Be sure to provide detailed information about the problem and steps to reproduce it.
 
-**License** </br>
+**License**  
+
 By contributing to this project, you agree that your contributions will be licensed under the project's LICENSE.
 
 Thank you for your contribution to TEXT-TO-HTML-CONVERTER! Your help is greatly appreciated.
