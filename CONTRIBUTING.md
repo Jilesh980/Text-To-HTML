@@ -27,14 +27,14 @@ git push origin master
 8. Create a pull request (PR) on the original repository. 
 Please provide a clear and concise description of your changes in the PR.
 
-** Code Style and Guidelines **
+**Code Style and Guidelines**
 1. Follow the coding style and guidelines used in the existing codebase.
 2. Ensure your code is well-documented, especially if you are introducing new features or making complex changes.
 
-** Reporting Issues **
+**Reporting Issues**
 If you encounter any issues or have suggestions for improvements, please create an issue on the GitHub repository. Be sure to provide detailed information about the problem and steps to reproduce it.
 
-** License **
+**License**
 By contributing to this project, you agree that your contributions will be licensed under the project's LICENSE.
 
 Thank you for your contribution to TEXT-TO-HTML-CONVERTER! Your help is greatly appreciated.
