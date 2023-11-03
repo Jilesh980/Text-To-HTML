@@ -1,4 +1,4 @@
-#How to Contribute
+## How to Contribute
 
 **To contribute to this project, please follow these steps:**
 
