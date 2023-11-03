@@ -15,6 +15,7 @@ cd till-tool
 
 4. Make your changes and enhancements.
 
+## Developing Project 
 5. I have used Prettier for making code look more beautiful, use the command below:  
 ```bash
 npm run prettier
@@ -24,6 +25,9 @@ npm run prettier
 ```bash
 npm run lint
 ```
+## Editor Integration:
+Make sure your code editor is set up to utilize the specified configurations for several features. You can find the VSCode settings in the '.vscode/setting.json' file for reference.  
+
 7. Test your changes to ensure they work as expected.
 8. Commit your changes with descriptive commit messages:
 ```bash
