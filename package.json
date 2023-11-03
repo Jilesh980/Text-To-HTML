@@ -11,5 +11,10 @@
   "dependencies": {
     "toml": "^3.0.0",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "3.0.3"
   }
 }

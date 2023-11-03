@@ -1,0 +1,8 @@
+{
+    "editor.renderWhitespace": "all",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    }
+}
