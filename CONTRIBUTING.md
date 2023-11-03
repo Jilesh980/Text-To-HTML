@@ -14,18 +14,29 @@ cd till-tool
  ```
 
 4. Make your changes and enhancements.
-5. Test your changes to ensure they work as expected.
-6. Commit your changes with descriptive commit messages:
+
+5. I have used Prettier for making code look more beautiful, use the command below:  
+```bash
+npm run prettier
+```
+
+6. I used ESLint for code linting. Run the following command to check for linting issues:  
+```bash
+npm run lint
+```
+7. Test your changes to ensure they work as expected.
+8. Commit your changes with descriptive commit messages:
 ```bash
 git commit -m "Add feature or fix issue" 
 ```
 
-7. Push your changes to your fork on GitHub:
+9. Push your changes to your fork on GitHub:
 ```bash 
 git push origin master 
 ```
-8. Create a pull request (PR) on the original repository. 
+10. Create a pull request (PR) on the original repository. 
 Please provide a clear and concise description of your changes in the PR.
+
 
 **Code Style and Guidelines**
 1. Follow the coding style and guidelines used in the existing codebase.
