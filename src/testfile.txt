@@ -1,0 +1,4 @@
+Title of the Text
+This is a test content for the text file.
+**Bold text example**
+Another paragraph in the file.

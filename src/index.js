@@ -34,6 +34,9 @@ function processFile(inputFilePath, outputDir, lang) {
 
   console.log(`Converted ${inputFilePath} to HTML.`);
 }
+module.exports = {
+  processFile // Ensure processFile is included in the exported object
+};
 
 function generateHTML(fileContent, lang) {
   const [title, ...paragraphs] = fileContent.split(/\n{1,}/); // Split by one or more newline characters
@@ -58,6 +61,7 @@ function generateHTML(fileContent, lang) {
     </body>
     </html>`;
 }
+
 
 function processConfigFile(configPath) {
   const configContent = readFile(configPath);
