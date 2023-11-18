@@ -1,12 +1,12 @@
-const fs = require("fs");
-const path = require("path");
-const yargs = require("yargs");
-const toml = require("toml");
+const fs = require('fs');
+const path = require('path');
+const yargs = require('yargs');
+const toml = require('toml');
 
 // Function to read the content of a file
 function readFile(filePath) {
   try {
-    return fs.readFileSync(filePath, "utf8");
+    return fs.readFileSync(filePath, 'utf8');
   } catch (error) {
     console.error(`Error reading file: ${error.message}`);
     process.exit(1);
@@ -34,20 +34,30 @@ function processFile(inputFilePath, outputDir, lang) {
 
   console.log(`Converted ${inputFilePath} to HTML.`);
 }
-module.exports = {
-  processFile // Ensure processFile is included in the exported object
-};
+
+// Function to process all .txt and .md files in a directory
+function processDirectory(inputDir, outputDir, lang) {
+  const files = fs.readdirSync(inputDir);
+
+  files.forEach((file) => {
+    const filePath = path.join(inputDir, file);
+
+    if (fs.lstatSync(filePath).isFile() && file.match(/\.(txt|md)$/)) {
+      processFile(filePath, outputDir, lang);
+    }
+  });
+}
 
 function generateHTML(fileContent, lang) {
   const [title, ...paragraphs] = fileContent.split(/\n{1,}/); // Split by one or more newline characters
-  const titleHtml = title ? `<title>${title}</title><h1>${title}</h1>` : "";
+  const titleHtml = title ? `<title>${title}</title><h1>${title}</h1>` : '';
   const paragraphsHtml = paragraphs
     .map((paragraph) => {
       // Support for bold text using double asterisks
-      paragraph = paragraph.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+      paragraph = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       return `<p>${paragraph}</p>`;
     })
-    .join("\n");
+    .join('\n');
 
   return `<!doctype html>
     <html lang="${lang}">
@@ -62,7 +72,6 @@ function generateHTML(fileContent, lang) {
     </html>`;
 }
 
-
 function processConfigFile(configPath) {
   const configContent = readFile(configPath);
   return toml.parse(configContent);
@@ -71,37 +80,37 @@ function processConfigFile(configPath) {
 // Main command-line tool logic
 function main() {
   yargs
-    .scriptName("til")
-    .usage("$0 <cmd> [args]")
+    .scriptName('til')
+    .usage('$0 <cmd> [args]')
     .command(
-      "process [input]",
-      "Process .txt and .md file(s) and generate HTML",
+      'process [input]',
+      'Process .txt and .md file(s) and generate HTML',
       (yargs) => {
         yargs
-          .positional("input", {
-            describe: "Input .txt file or folder",
-            type: "string",
+          .positional('input', {
+            describe: 'Input .txt file or folder',
+            type: 'string',
           })
-          .option("output", {
-            alias: "o",
-            describe: "Output directory",
-            type: "string",
+          .option('output', {
+            alias: 'o',
+            describe: 'Output directory',
+            type: 'string',
           })
-          .option("lang", {
-            alias: "l",
-            describe: "language for lang attribute on <html> elements",
-            type: "string",
-            default: "en-CA",
+          .option('lang', {
+            alias: 'l',
+            describe: 'language for lang attribute on <html> elements',
+            type: 'string',
+            default: 'en-CA',
           })
-          .option("config", {
-            alias: "c",
-            describe: "Path to TOML configuration file",
-            type: "string",
+          .option('config', {
+            alias: 'c',
+            describe: 'Path to TOML configuration file',
+            type: 'string',
           });
       },
       (argv) => {
         const inputPath = argv.input;
-        const outputDir = argv.output || "til"; // Use 'til' if not specified
+        let outputDir = argv.output || 'til'; // Use 'til' if not specified
         let lang = argv.lang;
 
         // Check if a config file is provided
@@ -130,17 +139,24 @@ function main() {
           processFile(inputPath, outputDir, lang);
         } else {
           console.error(
-            "Invalid input. Please provide a valid .txt or .md file or folder."
+            'Invalid input. Please provide a valid .txt or .md file or folder.'
           );
           process.exit(1); // Exit with a non-zero exit code
         }
       }
     )
-    .demandCommand(1, "You need to specify a command.")
-    .version("v", "Show the tool's name and version", `til v1.0.0`)
-    .alias("v", "version")
-    .help("h", "Show a useful help message")
-    .alias("h", "help").argv;
+    .demandCommand(1, 'You need to specify a command.')
+    .version('v', 'Show the tool\'s name and version', `til v1.0.0`)
+    .alias('v', 'version')
+    .help('h', 'Show a useful help message')
+    .alias('h', 'help').argv;
 }
 
 main();
+
+// Export the processFile function
+module.exports = {
+  processFile,
+  processDirectory,
+  // other exports if any
+};
